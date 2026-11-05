@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+@import '@texafashions/ui/theme.css';
+@source '../../../../packages/ui/src';
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+html, body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+body { font-variant-numeric: tabular-nums; }
+button { cursor: pointer; }
+.scroll-y { overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+
+/* ───────── thermal receipt (80 mm) — visible on screen as a preview, the only thing printed */
+.receipt { width: 80mm; max-width: 100%; background: #fff; color: #000; font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; line-height: 1.35; padding: 4mm 3mm; }
+.receipt h1 { font-size: 15px; text-align: center; font-weight: 700; letter-spacing: .04em; }
+.receipt .c { text-align: center; } .receipt .r { text-align: right; } .receipt .b { font-weight: 700; }
+.receipt hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
+.receipt table { width: 100%; border-collapse: collapse; } .receipt td { vertical-align: top; padding: 1px 0; }
+.receipt .row { display: flex; justify-content: space-between; gap: 6px; }
+.receipt .big { font-size: 14px; font-weight: 700; }
+.receipt .prov { border: 1.5px dashed #000; padding: 3px; text-align: center; font-weight: 700; margin: 4px 0; }
+@media print {
+  @page { size: 80mm auto; margin: 0; }
+  body * { visibility: hidden !important; }
+  .receipt-print, .receipt-print * { visibility: visible !important; }
+  .receipt-print { position: absolute; left: 0; top: 0; width: 80mm; box-shadow: none !important; }
+}

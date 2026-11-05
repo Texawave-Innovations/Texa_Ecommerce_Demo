@@ -1,0 +1,145 @@
+rules_version = '2';
+// Texa Fashions OS — Firestore rules (Phase 1).
+// Principle: clients READ (scoped by role); all stock/money/status/master writes go through callable functions.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function role() { return request.auth.token.role; }
+    function hasRole(r) { return signedIn() && role() in r; }
+    function staff() { return signedIn() && role() != null && role() != 'vendor'; }
+    function allStoreRole() { return signedIn() && role() in ['super_admin', 'cfo', 'buyer', 'warehouse_manager', 'auditor']; }
+    function locOk(loc) { return allStoreRole() || (staff() && loc in request.auth.token.storeIds); }
+    function scmRole() { return hasRole(['super_admin', 'cfo', 'buyer', 'warehouse_manager', 'auditor']); }
+    function isMyVendor(d) { return signedIn() && role() == 'vendor' && d.vendorId == request.auth.token.vendorId; }
+    function masterCol(c) {
+      return c in ['companies', 'gstins', 'stores', 'warehouses', 'bins', 'departments', 'categories', 'subCategories', 'brands', 'collections', 'styles', 'skus', 'blindboxSeries', 'priceLists', 'vendors', 'vendorPriceLists', 'customers', 'customerTiers', 'transporters', 'chas', 'ledgers', 'costCentres', 'taxCodes', 'paymentModes', 'bankAccounts', 'fxRates', 'promotionTypes', 'voucherSeries', 'giftCardSeries', 'loyaltyRules', 'employees', 'hrDepartments', 'designations', 'hrShifts', 'holidays', 'leaveTypes', 'salaryStructures', 'statutorySettings', 'reasonCodes', 'approvalMatrix', 'numberSeries', 'roles', 'notificationTemplates'];
+    }
+
+    match /orgs/{orgId} {
+      // Master data: read-only for staff; writes only via submitMasterChange/decideApproval.
+      match /{coll}/{docId} {
+        allow read: if staff() && masterCol(coll);
+        allow write: if false;
+        match /versions/{v} {
+          allow read: if staff() && masterCol(coll);
+          allow write: if false;
+        }
+      }
+
+      // Pending maker-checker items.
+      match /approvals/{id} {
+        allow read: if hasRole(['super_admin', 'cfo', 'buyer', 'warehouse_manager', 'hr_manager', 'store_manager', 'auditor'])
+                    || (signedIn() && resource.data.requestedBy == request.auth.uid);
+        allow write: if false;
+      }
+
+      // Append-only audit trail, written by functions only.
+      match /auditLogs/{id} {
+        allow read: if hasRole(['super_admin', 'cfo', 'auditor']);
+        allow write: if false;
+      }
+
+      // ───────── Inventory (store-scoped reads; writes only via callable functions)
+      match /stock/{id} { allow read: if staff() && locOk(resource.data.locationId); allow write: if false; }
+      match /stockLedger/{id} { allow read: if staff() && locOk(resource.data.locationId); allow write: if false; }
+      match /stockLocks/{id} { allow read: if staff(); allow write: if false; }
+      match /replenishmentSuggestions/{id} { allow read: if (scmRole() || hasRole(['store_manager'])) && locOk(resource.data.locationId); allow write: if false; }
+      match /purchaseRequisitions/{id} { allow read: if (scmRole() || hasRole(['store_manager'])) && locOk(resource.data.storeId); allow write: if false; }
+      match /stockTransfers/{id} { allow read: if (scmRole() || hasRole(['store_manager'])) && (locOk(resource.data.fromLocationId) || locOk(resource.data.toLocationId)); allow write: if false; }
+      match /{coll}/{id} {
+        allow read: if (coll in ['adjustments', 'cycleCounts', 'stockTakes']) && (scmRole() || hasRole(['store_manager'])) && locOk(resource.data.locationId);
+        allow write: if false;
+      }
+
+      // ───────── Procurement (finance/SCM roles; vendors see only their own POs, acks and ASNs)
+      match /{coll}/{id} {
+        allow read: if (coll in ['rfqs', 'quotations', 'grns', 'qcInspections', 'putawayTasks', 'gateEntries', 'billsOfEntry', 'landedCosts', 'ewayBills',
+                                 'purchaseReturns', 'debitNotes', 'purchaseInvoices', 'matchResults', 'paymentVouchers', 'apBills', 'messageLog']) && scmRole();
+        allow write: if false;
+      }
+
+      // ───────── Finance (Phase 5). Server-only: every journal/budget write is a callable or trigger.
+      match /{coll}/{id} {
+        allow read: if (coll in ['journals', 'budgets']) && hasRole(['super_admin', 'cfo', 'buyer', 'warehouse_manager', 'auditor', 'store_manager']);
+        allow write: if false;
+      }
+      // ───────── GST + Tally (Phase 5). gst2bRecords is the seeded mock 2B feed; tallyQueue/tallySyncLog are server/agent-only.
+      match /{coll}/{id} {
+        allow read: if (coll in ['gst2bRecords', 'tallyQueue', 'tallySyncLog']) && hasRole(['super_admin', 'cfo', 'auditor']);
+        allow write: if false;
+      }
+      // ───────── Reconciliation Centre (Phase 5). reconFeeds is the seeded source/target data; reconRuns/reconItems are written only by runRecon/decideReconMatch/reconAiSuggest.
+      match /{coll}/{id} {
+        allow read: if (coll in ['reconFeeds', 'reconRuns', 'reconItems']) && hasRole(['super_admin', 'cfo', 'auditor']);
+        allow write: if false;
+      }
+      match /{coll}/{id} {
+        allow read: if (coll in ['purchaseOrders', 'poAcks', 'asns']) && (scmRole() || isMyVendor(resource.data));
+        allow write: if false;
+      }
+      match /purchaseOrders/{id}/versions/{v} { allow read: if scmRole(); allow write: if false; }
+
+
+      // ───────── POS (Phase 3). Clients READ store-scoped; the only client writes are outbox sales (offline) and parked-bill drafts.
+      match /{coll}/{id} {
+        allow read: if staff() && (coll in ['tills', 'shifts', 'sales', 'returns', 'zReports', 'posOutbox', 'reservations', 'creditNotes']) && locOk(resource.data.storeId);
+        allow write: if false;
+      }
+      match /{coll}/{id} {
+        allow read: if staff() && (coll in ['promotions', 'vouchers', 'giftCards', 'loyaltyLedger']);
+        allow write: if false;
+      }
+      match /giftCards/{id}/txns/{t} { allow read: if staff(); allow write: if false; }
+      // Offline sale: create-only, pending, own store, own uid, doc id == clientSaleId. A trigger function finalises it.
+      match /posOutbox/{id} {
+        allow create: if hasRole(['cashier', 'store_manager', 'super_admin'])
+                      && locOk(request.resource.data.storeId)
+                      && request.resource.data.status == 'pending'
+                      && request.resource.data.createdBy == request.auth.uid
+                      && request.resource.data.clientSaleId == id
+                      && request.resource.data.keys().hasOnly(['status', 'clientSaleId', 'storeId', 'tillId', 'shiftId', 'cashierId', 'cashierName', 'provisionalNo', 'createdAtClient', 'clientTotalPaise', 'input', 'createdBy']);
+        allow update, delete: if false;
+      }
+      // Parked / held bills are drafts: no stock, money or status authority.
+      match /parkedBills/{id} {
+        allow read: if staff() && locOk(resource.data.storeId);
+        allow create, update: if hasRole(['cashier', 'sales_associate', 'store_manager', 'super_admin']) && locOk(request.resource.data.storeId)
+                              && request.resource.data.keys().hasOnly(['storeId', 'tillId', 'cashierId', 'label', 'customer', 'lines', 'createdAt', 'updatedAt']);
+        allow delete: if hasRole(['cashier', 'sales_associate', 'store_manager', 'super_admin']) && locOk(resource.data.storeId);
+      }
+      // ───────── OMS + Shopify connector (Phase 4). Reads only; every write is a function (webhook, scheduler or callable).
+      // Web orders / events carry customer PII → HQ roles only. Pick lists, shipments and RTO cases are location-scoped so a store manager sees their own work.
+      match /{coll}/{id} {
+        allow read: if (coll in ['webOrders', 'codRemittances', 'shopifyEvents', 'failedEvents', 'stockPushRuns', 'shopifyStock', 'syncHealth'])
+                    && hasRole(['super_admin', 'cfo', 'buyer', 'warehouse_manager', 'auditor']);
+        allow write: if false;
+      }
+      match /{coll}/{id} {
+        allow read: if staff() && (coll in ['pickLists', 'shipments', 'rtoCases']) && locOk(resource.data.locationId);
+        allow write: if false;
+      }
+      // ───────── HR Core (Phase 6). Reads only; every write (hire, check-in, leave, roster) is a callable. hr_manager sees everyone; other staff see their own store.
+      match /{coll}/{id} {
+        allow read: if staff() && (coll in ['candidates', 'attendance', 'rosters', 'footfallHourly']) && locOk(resource.data.storeId);
+        allow write: if false;
+      }
+      match /onboardingTasks/{id} { allow read: if hasRole(['hr_manager', 'store_manager', 'super_admin', 'auditor']); allow write: if false; }
+      match /leaveRequests/{id} { allow read: if staff(); allow write: if false; }
+      // ───────── Payroll (Phase 6). Every write is the runPayroll callable. payrollRuns is HQ-only; payslips are readable by any
+      // staff member (the self-service page picks "their" employee the same way Leave/Attendance do — see docs/flows/09-hr-payroll.md).
+      match /payrollRuns/{id} { allow read: if hasRole(['hr_manager', 'cfo', 'super_admin', 'auditor']); allow write: if false; }
+      match /payslips/{id} { allow read: if staff(); allow write: if false; }
+      // ───────── Uni chats (Phase 7). Written only by the aiChat function; a user reads only their own.
+      match /aiChats/{id} { allow read: if signedIn() && resource.data.userId == request.auth.uid; allow write: if false; }
+      // Notifications (Phase 7). Written only by functions; a user reads only their own inbox, insights are scoped by store.
+      match /inbox/{id} { allow read: if signedIn() && resource.data.userId == request.auth.uid; allow write: if false; }
+      match /aiInsights/{id} { allow read: if staff() && (resource.data.storeId == null || locOk(resource.data.storeId)); allow write: if false; }
+      // Server-only: PIN hashes, journals, rollups, counters.
+
+      // Ledgers, stock, invoices, payments are never client-writable.
+      match /{document=**} {
+        allow write: if false;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "texafashions-os",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "eslint .",
+    "test": "turbo run test",
+    "test:rules": "firebase emulators:exec --only firestore,storage,database --project demo-texafashions \"pnpm --filter @texafashions/rules-tests test:emulator\"",
+    "seed": "pnpm --filter @texafashions/seed seed",
+    "twin:sim": "pnpm --filter @texafashions/seed twin",
+    "dev": "node scripts/demo.mjs",
+    "demo": "node scripts/demo.mjs",
+    "e2e": "pnpm --filter @texafashions/e2e e2e",
+    "deploy:backend": "pnpm --filter @texafashions/functions build && firebase deploy --only functions,firestore,storage,database",
+    "deploy:rules": "firebase deploy --only firestore,storage,database",
+    "demo:local": "node scripts/local.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "firebase-tools": "^15.34.2",
+    "globals": "^17.14.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "turbo": "^2.11.10",
+    "typescript": "5",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.1.0"
+  }
+}

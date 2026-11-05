@@ -1,0 +1,13 @@
+side,refNo,amountPaise,date,description
+source,UTR-BK1001,150000000,2026-10-20,NEFT credit — Shopify payout
+source,UTR-BK1002,250000000,2026-10-21,RTGS credit — card settlement HDFC
+source,UTR-BK1003,98000000,2026-10-22,NEFT credit — UPI settlement
+source,,75000000,2026-10-24,IMPS credit — store cash deposit BLR-CS
+source,,42000000,2026-10-25,NEFT credit — store cash deposit PUN-PMC
+source,UTR-BK1006,30000000,2026-10-27,NEFT debit — vendor payment Hana Trading
+target,UTR-BK1001,150000000,2026-10-20,GL: bank receipt — Shopify settlement
+target,UTR-BK1002,250000000,2026-10-21,GL: bank receipt — card settlement
+target,UTR-BK1003,98000000,2026-10-22,GL: bank receipt — UPI settlement
+target,,75000000,2026-10-25,GL: bank receipt — cash deposit BLR-CS
+target,UTR-BK1006,30000000,2026-10-27,GL: bank payment — Hana Trading
+target,UTR-BK1099,120000,2026-10-28,GL: bank charges — unexplained debit

@@ -1,0 +1,9 @@
+side,refNo,amountPaise,date,description
+source,VAL-WH-001,420000000,2026-10-31,Stock valuation — Central Warehouse closing
+source,VAL-PUN-001,65000000,2026-10-31,Stock valuation — PUN-PMC closing
+source,VAL-BLR-001,58000000,2026-10-31,Stock valuation — BLR-CS closing
+source,VAL-MUM-001,71000000,2026-10-31,Stock valuation — MUM-PMC closing (unexplained variance)
+target,VAL-WH-001,420000000,2026-10-31,GL inventory ledger — Central Warehouse
+target,VAL-PUN-001,65000000,2026-10-31,GL inventory ledger — PUN-PMC
+target,VAL-BLR-001,58000000,2026-10-31,GL inventory ledger — BLR-CS
+target,VAL-MUM-001,68500000,2026-10-31,GL inventory ledger — MUM-PMC (landed-cost reval pending)

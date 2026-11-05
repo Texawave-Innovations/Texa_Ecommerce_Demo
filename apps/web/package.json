@@ -1,0 +1,48 @@
+{
+  "name": "@texafashions/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.105.3",
+    "@tanstack/react-table": "^8.21.3",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.4.0",
+    "framer-motion": "^14.9.1",
+    "fuse.js": "^7.5.0",
+    "gsap": "^3.15.1",
+    "jsbarcode": "^3.12.3",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.68.0",
+    "next": "^16.4.5",
+    "papaparse": "^5.7.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.91.0",
+    "read-excel-file": "^9.3.14",
+    "tailwind-merge": "^3.7.0",
+    "zustand": "^5.0.16"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@texafashions/data": "workspace:^",
+    "@texafashions/domain": "workspace:^",
+    "@texafashions/types": "workspace:^",
+    "@texafashions/ui": "workspace:^",
+    "@types/node": "^26.6.6",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4",
+    "typescript": "5",
+    "vitest": "^5.1.0"
+  }
+}

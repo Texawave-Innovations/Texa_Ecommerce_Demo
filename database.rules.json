@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "twin": {
+      ".read": "auth != null && auth.token.role != null && auth.token.role != 'vendor'",
+      ".write": false
+    }
+  }
+}

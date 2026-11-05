@@ -1,0 +1,9 @@
+side,refNo,amountPaise,date,description
+source,PAYOUT-G1,125000000,2026-10-20,Gateway payout — batch of 3 web orders
+source,PAYOUT-G2,89900,2026-10-21,Gateway payout — single web order
+source,PAYOUT-G3,45000000,2026-10-22,Gateway payout — unmatched (bank float delay)
+target,,50000000,2026-10-20,Web order WEB-5001 payment captured
+target,,45000000,2026-10-20,Web order WEB-5002 payment captured
+target,,30000000,2026-10-20,Web order WEB-5003 payment captured
+target,PAYOUT-G2,89900,2026-10-21,Web order WEB-5004 payment captured
+target,,60000000,2026-10-23,Web order WEB-5005 payment captured — not yet paid out

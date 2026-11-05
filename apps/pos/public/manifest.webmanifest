@@ -1,0 +1,11 @@
+{
+  "name": "Texa Fashions POS",
+  "short_name": "Uni POS",
+  "description": "Offline-first tablet POS for Texa Fashions stores",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#FFFBF7",
+  "theme_color": "#E5486B",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

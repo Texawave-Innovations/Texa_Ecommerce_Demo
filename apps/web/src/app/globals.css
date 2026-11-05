@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+@import '@texafashions/ui/theme.css';
+@source '../../../../packages/ui/src';
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));

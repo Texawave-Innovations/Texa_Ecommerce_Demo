@@ -1,0 +1,8 @@
+side,refNo,amountPaise,date,description
+source,,6300000,2026-10-19,Bank cash deposit slip DEP-991 — PUN-PMC (two shifts)
+source,,4500000,2026-10-20,Bank cash deposit slip DEP-992 — BLR-CS
+source,,8000000,2026-10-22,Bank cash deposit slip DEP-993 — delayed clearing
+target,,3500000,2026-10-19,Store cash drop PUN-PMC shift AM
+target,,2800000,2026-10-19,Store cash drop PUN-PMC shift PM
+target,,4500000,2026-10-20,Store cash drop BLR-CS shift AM
+target,,6000000,2026-10-23,Store cash drop HYD-NX — not yet deposited

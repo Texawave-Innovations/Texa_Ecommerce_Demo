@@ -1,0 +1,23 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function staff() { return request.auth != null && request.auth.token.role != null && request.auth.token.role != 'vendor'; }
+    function canUpload() {
+      return request.auth != null && request.auth.token.role in ['super_admin', 'buyer', 'warehouse_manager', 'hr_manager', 'cfo', 'store_manager'];
+    }
+    // Vendor portal: a vendor may read/write only its own folder (proformas, ASN documents).
+    match /orgs/{orgId}/vendor-portal/{vendorId}/{allPaths=**} {
+      allow read: if staff() || (request.auth != null && request.auth.token.role == 'vendor' && request.auth.token.vendorId == vendorId);
+      allow write: if ((request.auth != null && request.auth.token.role == 'vendor' && request.auth.token.vendorId == vendorId) || canUpload())
+                   && request.resource.size < 10 * 1024 * 1024;
+    }
+    match /orgs/{orgId}/master/{allPaths=**} {
+      allow read: if staff();
+      allow write: if canUpload() && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+    }
+    match /orgs/{orgId}/{module}/{allPaths=**} {
+      allow read: if staff();
+      allow write: if module != 'master' && module != 'vendor-portal' && canUpload() && request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}

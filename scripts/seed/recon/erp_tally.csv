@@ -1,0 +1,9 @@
+side,refNo,amountPaise,date,description
+source,JV/BLR-FS/26-27/00041,249900,2026-10-20,ERP journal — POS sale
+source,JV/PUN-PMC/26-27/00118,599000,2026-10-21,ERP journal — POS sale
+source,JV/WH-CENTRAL/26-27/00076,1888400,2026-10-22,ERP journal — purchase invoice
+source,JV/HYD-SC/26-27/00052,420000,2026-10-23,ERP journal — payment voucher (Tally sync failed)
+target,JV/BLR-FS/26-27/00041,249900,2026-10-20,Tally sync log — Sales voucher sent
+target,JV/PUN-PMC/26-27/00118,599000,2026-10-21,Tally sync log — Sales voucher sent
+target,JV/WH-CENTRAL/26-27/00076,1888400,2026-10-22,Tally sync log — Purchase voucher sent
+target,JV/BLR-CS/26-27/00205,199000,2026-10-24,Tally sync log — Sales voucher sent (no matching ERP journal found)

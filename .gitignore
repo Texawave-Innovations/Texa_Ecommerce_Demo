@@ -147,3 +147,17 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# project
+.turbo/
+.next/
+.emulator-data/
+lib/
+dist/
+.secret.local
+.env.local
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*.tsbuildinfo
+next-env.d.ts

@@ -1,0 +1,78 @@
+/* Texa Soft design tokens. Import AFTER `@import "tailwindcss"` in the app's globals.css. */
+:root {
+  --bg: #fffbf7;
+  --card: #ffffff;
+  --card-2: #fff6ef;
+  --ink: #2b2633;
+  --ink-soft: #6b6575;
+  --line: #efe6df;
+  --blush: #f7c6d0;
+  --butter: #fce7a8;
+  --mint: #bfe6d6;
+  --sky: #c7ddf5;
+  --lavender: #d9ccf2;
+  --cherry: #e5486b;
+  --cherry-ink: #ffffff;
+  --glass: rgba(255, 255, 255, 0.88);
+  --shadow-soft: 0 1px 2px rgba(43, 38, 51, 0.06), 0 8px 24px rgba(43, 38, 51, 0.08);
+  --shadow-pop: 0 2px 4px rgba(229, 72, 107, 0.2), 0 12px 28px rgba(229, 72, 107, 0.22);
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --bg: #1c1824;
+  --card: #262131;
+  --card-2: #2d273a;
+  --ink: #f6f1fa;
+  --ink-soft: #a79fb5;
+  --line: #3a3348;
+  --blush: #6d3a49;
+  --butter: #6b5a2c;
+  --mint: #2f5a4b;
+  --sky: #2f4a6b;
+  --lavender: #4a3d6e;
+  --cherry: #ff6b8b;
+  --cherry-ink: #1c1824;
+  --glass: rgba(38, 33, 49, 0.9);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-pop: 0 2px 4px rgba(255, 107, 139, 0.25), 0 12px 28px rgba(255, 107, 139, 0.2);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-card2: var(--card-2);
+  --color-ink: var(--ink);
+  --color-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-blush: var(--blush);
+  --color-butter: var(--butter);
+  --color-mint: var(--mint);
+  --color-sky: var(--sky);
+  --color-lavender: var(--lavender);
+  --color-cherry: var(--cherry);
+  --color-cherry-ink: var(--cherry-ink);
+  --radius-card: 20px;
+  --radius-pill: 999px;
+  --shadow-soft: var(--shadow-soft);
+  --shadow-pop: var(--shadow-pop);
+  --font-display: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-kr: var(--font-noto-kr), 'Apple SD Gothic Neo', sans-serif;
+}
+
+html { background: var(--bg); color: var(--ink); font-family: var(--font-inter), system-ui, sans-serif; }
+body { background: var(--bg); min-height: 100dvh; }
+.num { font-variant-numeric: tabular-nums; text-align: right; }
+.glass { background: var(--glass); backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3); border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+.font-display { font-family: var(--font-fredoka), ui-rounded, system-ui, sans-serif; }
+.font-kr { font-family: var(--font-noto-kr), 'Apple SD Gothic Neo', sans-serif; }
+
+@keyframes pulse-crit { 0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--cherry) 55%, transparent); } 50% { box-shadow: 0 0 0 8px transparent; } }
+.pulse-crit { animation: pulse-crit 1.8s ease-out infinite; }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.skeleton { background: linear-gradient(90deg, var(--card-2) 25%, var(--line) 50%, var(--card-2) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; border-radius: 12px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+:focus-visible { outline: 2px solid var(--cherry); outline-offset: 2px; }

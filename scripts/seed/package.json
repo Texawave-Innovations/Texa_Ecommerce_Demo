@@ -1,0 +1,24 @@
+{
+  "name": "@texafashions/seed",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "tsx src/index.ts",
+    "twin": "tsx src/twin-sim.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^9.4.0",
+    "firebase-admin": "^14.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@texafashions/domain": "workspace:^",
+    "@texafashions/types": "workspace:^",
+    "tsx": "^4.23.15",
+    "typescript": "5",
+    "vitest": "^5.1.0"
+  }
+}

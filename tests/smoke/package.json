@@ -1,0 +1,25 @@
+{
+  "name": "@texafashions/smoke-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "smoke": "tsx smoke.ts",
+    "typecheck": "tsc --noEmit",
+    "scm": "tsx scm.ts",
+    "pos": "tsx pos.ts",
+    "oms": "tsx oms.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@texafashions/data": "workspace:^",
+    "@texafashions/types": "workspace:^",
+    "tsx": "^4.23.15",
+    "typescript": "5",
+    "@texafashions/domain": "workspace:^"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.5.0",
+    "@google-cloud/firestore": "^9.4.0"
+  }
+}

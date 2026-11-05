@@ -1,0 +1,11 @@
+side,refNo,amountPaise,date,description
+source,AUTH-CD4401,599000,2026-10-20,Card settlement batch — PUN-PMC
+source,AUTH-CD4402,399000,2026-10-21,Card settlement batch — BLR-CS
+source,AUTH-CD4403,799000,2026-10-21,Card settlement batch — HYD-SC
+source,,249000,2026-10-23,Card settlement batch — NSK-CC
+source,AUTH-CD4405,1099000,2026-10-24,Card settlement batch — MUM-PMC
+target,AUTH-CD4401,599000,2026-10-20,POS sale TXF-PUN-00150 (Card)
+target,AUTH-CD4402,399000,2026-10-21,POS sale TXF-BLR-00101 (Card)
+target,AUTH-CD4403,799000,2026-10-22,POS sale TXF-HYD-00203 (Card)
+target,,249000,2026-10-24,POS sale TXF-NSK-00044 (Card)
+target,AUTH-CD4406,459000,2026-10-25,POS sale TXF-MUM-00230 (Card) — awaiting settlement

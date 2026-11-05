@@ -1,0 +1,9 @@
+side,refNo,amountPaise,date,description
+source,REM-C001,185000000,2026-10-18,Courier COD remittance — batch of 3 orders
+source,REM-C002,45000000,2026-10-19,Courier COD remittance — single order
+source,REM-C003,30000000,2026-10-21,Courier COD remittance — unmatched (short remittance)
+target,,80000000,2026-10-18,COD order WEB-COD-9001
+target,,60000000,2026-10-18,COD order WEB-COD-9002
+target,,45000000,2026-10-18,COD order WEB-COD-9003
+target,REM-C002,45000000,2026-10-19,COD order WEB-COD-9004
+target,,52000000,2026-10-22,COD order WEB-COD-9005 — remittance pending

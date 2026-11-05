@@ -1,0 +1,9 @@
+side,refNo,amountPaise,date,description
+source,HANA-INV-2201,1888400,2026-10-05,Books purchase invoice — Hana Trading
+source,YIWU-INV-0871,944200,2026-10-11,Books purchase invoice — Yiwu Cute
+source,KPACK-INV-0433,236050,2026-10-14,Books purchase invoice — K-Pack Supplies
+source,SEOULGIFT-INV-77,566520,2026-10-18,Books purchase invoice — not yet filed by vendor
+target,HANA-INV-2201,1888400,2026-10-06,GSTR-2B — Hana Trading
+target,YIWU-INV-0871,849780,2026-10-11,GSTR-2B — Yiwu Cute (vendor under-reported tax)
+target,KPACK-INV-0433,236050,2026-10-14,GSTR-2B — K-Pack Supplies
+target,PHANTOM-INV-01,15000,2026-10-20,GSTR-2B — filed by vendor, never recorded in our books

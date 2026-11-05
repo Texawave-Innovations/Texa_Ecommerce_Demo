@@ -1,0 +1,40 @@
+{
+  "name": "@texafashions/pos",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3101",
+    "build": "next build",
+    "start": "next start -p 3101",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.105.3",
+    "clsx": "^2.1.1",
+    "framer-motion": "^14.9.1",
+    "fuse.js": "^7.5.0",
+    "lucide-react": "^1.68.0",
+    "next": "^16.4.5",
+    "qrcode": "1.5.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwind-merge": "^3.7.0",
+    "zustand": "^5.0.16"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@texafashions/data": "workspace:^",
+    "@texafashions/domain": "workspace:^",
+    "@texafashions/types": "workspace:^",
+    "@texafashions/ui": "workspace:^",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4",
+    "typescript": "5",
+    "vitest": "^5.1.0"
+  }
+}
